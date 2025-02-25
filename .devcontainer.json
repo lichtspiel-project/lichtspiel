@@ -3,5 +3,6 @@
     "image": "rust:1.85-slim-bookworm",
     "features": {
         "ghcr.io/devcontainers/features/git:1": {}
-    }
+    },
+    "postCreateCommand": "rustup component add clippy rustfmt"
 }

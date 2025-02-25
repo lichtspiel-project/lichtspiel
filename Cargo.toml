@@ -2,5 +2,13 @@
 name = "lichtspiel"
 version = "0.1.0"
 edition = "2024"
+license = "MIT"
+description = "Implementation of a ray tracer"
+homepage = "https://docs.rs/lichtspiel"
+repository = "https://github.com/ucyo/lichtspiel"
+exclude = [
+    ".devcontainer.json",
+    ".gitignore",
+]
 
 [dependencies]
