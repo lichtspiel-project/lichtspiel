@@ -12,3 +12,6 @@ publish-dry:
 
 publish:
 	cargo publish
+
+run:
+	cargo run
