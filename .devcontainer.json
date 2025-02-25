@@ -4,5 +4,5 @@
     "features": {
         "ghcr.io/devcontainers/features/git:1": {}
     },
-    "postCreateCommand": "rustup component add clippy rustfmt"
+    "postCreateCommand": "apt-get update && apt-get install -y make && rustup component add clippy rustfmt"
 }
