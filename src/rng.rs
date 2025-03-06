@@ -1,7 +1,7 @@
 use std::u64;
 
 #[derive(Debug)]
-struct PCG32 {
+pub struct PCG32 {
     state: u64,
     seq: u64,
 }
@@ -10,13 +10,13 @@ const PCG32_DEFAULT_STATE: u64 = 0x853c49e6748fea9bu64;
 const PCG32_DEFAULT_SEQ: u64 = 0xda3e39cb94b95bdbu64;
 
 impl PCG32 {
-    fn new() -> Self {
+    pub fn new() -> Self {
         PCG32 {
             state: PCG32_DEFAULT_STATE,
             seq: PCG32_DEFAULT_SEQ,
         }
     }
-    fn srandom(initstate: u64, initseq: u64) -> Self {
+    pub fn srandom(initstate: u64, initseq: u64) -> Self {
         let state = 0u64;
         let seq = (initseq << 1) | 1;
         let mut pcg32 = PCG32 { state, seq };
@@ -25,7 +25,7 @@ impl PCG32 {
         let _ = pcg32.random();
         pcg32
     }
-    fn random(&mut self) -> u32 {
+    pub fn random(&mut self) -> u32 {
         let oldstate = self.state;
         log::debug!(" old: {:x}", oldstate);
         self.state = oldstate
