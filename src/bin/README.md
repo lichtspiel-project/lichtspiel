@@ -24,5 +24,5 @@ Now there can be several performances tests run.
 - Compare statistical stability of the RNG e.g. xorshiftstar
 
     ```bash
-    xorshiftstar | RNG_Test stdin32
+    xorshiftstar | rng_test stdin32
     ```

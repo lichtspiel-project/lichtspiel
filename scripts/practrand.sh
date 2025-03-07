@@ -25,4 +25,4 @@ unzip -q PractRand_0.93.zip
 g++ -std=c++14 -c $(find src -name '*.cpp') -O3 -Iinclude -pthread
 ar rcs libPractRand.a $(find . -name '*.o')
 g++ -std=c++14 -o RNG_test tools/RNG_test.cpp libPractRand.a -O3 -Iinclude -pthread
-mv RNG_test /usr/local/bin
+ln -s $WORKING_DIR/RNG_test /usr/local/bin/rng_test

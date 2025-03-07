@@ -15,4 +15,3 @@ COPY ./scripts/* .
 RUN bash practrand.sh
 
 WORKDIR /app
-RUN rm -rf /tmp/pr
