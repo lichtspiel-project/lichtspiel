@@ -40,6 +40,15 @@ impl PCG32 {
         log::debug!(" res: {:x}", result);
         result
     }
+    pub fn boundedrand(&mut self, bound: u32) -> u32 {
+        let threshold = 0u32.wrapping_sub(bound) % bound;
+        loop {
+            let r = self.random();
+            if r >= threshold {
+                return r % bound;
+            }
+        }
+    }
 }
 
 fn u64_to_u32_high(num: u64) -> u32 {
@@ -138,6 +147,16 @@ mod tests {
 
         for (rnd, ex) in pcg32.skip(2).take(4).zip(exp.iter()) {
             assert_eq!(rnd, *ex);
+        }
+    }
+
+    #[test]
+    fn bounded_works() {
+        let mut pcg32 = PCG32::new();
+        let b = 9373u32;
+
+        for _ in 0..10 {
+            assert!(pcg32.boundedrand(b) <= b)
         }
     }
 }
