@@ -1,6 +1,6 @@
 use std::io::Write;
 
-use lichtspiel::rng::PCG32;
+use lichtspiel::rng::pcg::PCG32;
 
 fn main() -> std::io::Result<()> {
     let mut rng = PCG32::new();
