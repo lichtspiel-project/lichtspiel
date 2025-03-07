@@ -29,7 +29,7 @@ fn bitmix32_r(num: u32) -> u32 {
 /// Unfortunately not figured out the reverse function yet.
 /// https://marc-b-reynolds.github.io/math/2017/10/13/IntegerBijections.html#fnref:modinverse
 /// If reverse is need use one of the other methods.
-fn bitmix(num: u32) -> u32 {
+pub fn bitmix(num: u32) -> u32 {
     let mut x = num;
     x ^= x >> 16;
     x = x.wrapping_mul(0x21f0aaad_u32);

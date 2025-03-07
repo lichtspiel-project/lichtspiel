@@ -1,5 +1,3 @@
-use super::util::{u64_to_u32_high, u64_to_u32_low};
-
 #[derive(Debug)]
 pub struct PCG32 {
     state: u64,
@@ -39,37 +37,6 @@ impl PCG32 {
         let result = (xorshifted >> rot) | (xorshifted << (nrot & 31));
         log::debug!(" res: {:x}", result);
         result
-    }
-    pub fn boundedrand(&mut self, bound: u32) -> u32 {
-        let threshold = 0u32.wrapping_sub(bound) % bound;
-        loop {
-            let r = self.random();
-            if r >= threshold {
-                return r % bound;
-            }
-        }
-    }
-    /// Implementation based on https://www.pcg-random.org/posts/bounded-rands.html
-    pub fn boundedrand_fast(&mut self, bound: u32) -> u32 {
-        let mut x = self.random();
-        let mut m = x as u64 * bound as u64;
-        let mut l = u64_to_u32_low(m);
-
-        if l < bound {
-            let mut t = 0u32.wrapping_sub(bound);
-            if t >= bound {
-                t -= bound;
-                if t >= bound {
-                    t %= bound;
-                }
-            }
-            while l < t {
-                x = self.random();
-                m = x as u64 * bound as u64;
-                l = u64_to_u32_low(m);
-            }
-        }
-        u64_to_u32_high(m)
     }
 }
 
@@ -120,22 +87,6 @@ mod tests {
     }
 
     #[test]
-    fn from_high_to_low_works() {
-        let mut pcg32 = PCG32::srandom(42, 54);
-        _ = pcg32.random();
-        let h = u64_to_u32_high(pcg32.state);
-        let l = u64_to_u32_low(pcg32.state);
-        assert_eq!(h, 0x2b47fed8);
-        assert_eq!(l, 0x8766bb05);
-
-        _ = pcg32.random();
-        let h = u64_to_u32_high(pcg32.state);
-        let l = u64_to_u32_low(pcg32.state);
-        assert_eq!(h, 0x8b33296d);
-        assert_eq!(l, 0x19bf5b4e);
-    }
-
-    #[test]
     fn iterator_works() {
         let pcg32 = PCG32::srandom(42, 54);
         let exp = [
@@ -147,26 +98,6 @@ mod tests {
 
         for (rnd, ex) in pcg32.skip(2).take(4).zip(exp.iter()) {
             assert_eq!(rnd, *ex);
-        }
-    }
-
-    #[test]
-    fn bounded_works() {
-        let mut pcg32 = PCG32::new();
-        let b = 9373u32;
-
-        for _ in 0..10 {
-            assert!(pcg32.boundedrand(b) <= b)
-        }
-    }
-
-    #[test]
-    fn bounded_fast_works() {
-        let mut pcg32 = PCG32::new();
-        let b = 9373u32;
-
-        for _ in 0..10 {
-            assert!(pcg32.boundedrand_fast(b) <= b)
         }
     }
 }
