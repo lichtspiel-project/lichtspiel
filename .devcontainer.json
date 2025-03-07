@@ -1,8 +1,9 @@
 {
     "name": "Lichtspiel",
-    "image": "rust:1.85-slim-bookworm",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
     "features": {
         "ghcr.io/devcontainers/features/git:1": {}
-    },
-    "postCreateCommand": "apt-get update && apt-get install -y make && rustup component add clippy rustfmt"
+    }
 }
