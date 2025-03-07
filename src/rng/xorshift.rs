@@ -31,6 +31,13 @@ impl XorshiftStar32 {
         }
     }
 
+    pub fn with(state: u64) -> Self {
+        XorshiftStar32 {
+            state: state,
+            ..Default::default()
+        }
+    }
+
     fn advance(&mut self) {
         self.state ^= self.state >> self.a;
         self.state ^= self.state << self.b;
@@ -41,6 +48,12 @@ impl XorshiftStar32 {
         let result = self.state.wrapping_mul(self.threshold);
         self.advance();
         u64_to_u32_high(result)
+    }
+
+    pub fn jump(&mut self, jumps: usize) {
+        for _ in 0..jumps {
+            self.advance();
+        }
     }
 }
 
