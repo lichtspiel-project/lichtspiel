@@ -73,11 +73,11 @@ impl PCG32 {
     }
 }
 
-fn u64_to_u32_high(num: u64) -> u32 {
+pub(crate) fn u64_to_u32_high(num: u64) -> u32 {
     u64_to_u32(num, true)
 }
 
-fn u64_to_u32_low(num: u64) -> u32 {
+pub(crate) fn u64_to_u32_low(num: u64) -> u32 {
     u64_to_u32(num, false)
 }
 
