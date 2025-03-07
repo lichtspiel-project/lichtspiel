@@ -9,8 +9,10 @@ COPY .  /app
 WORKDIR /app
 RUN apt-get install -y bsdmainutils && cargo install hyperfine && cargo install --path .
 
-# test if output is really random
-# > rng | hexdump -Cv | head
-#
-# compare rng and xorshiftstar
-# > hyperfine --warmup 3 'rng | head -n 999999' 'xorshiftstar | head -n 999999'
+WORKDIR /tmp/pr
+COPY ./scripts/* .
+
+RUN bash practrand.sh
+
+WORKDIR /app
+RUN rm -rf /tmp/pr
