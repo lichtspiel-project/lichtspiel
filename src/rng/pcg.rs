@@ -29,7 +29,7 @@ impl PCG32 {
         let oldstate = self.state;
         log::debug!(" old: {:x}", oldstate);
         self.state = oldstate
-            .wrapping_mul(6364136223846793005u64)
+            .wrapping_mul(0x5851f42d4c957f2du64)
             .wrapping_add(self.seq);
         log::debug!(" new: {:x} {0}", self.state);
         let xorshifted: u32 = (((oldstate >> 18) ^ oldstate) >> 27) as u32;
