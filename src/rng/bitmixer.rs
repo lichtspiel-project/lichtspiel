@@ -3,7 +3,7 @@
 //! https://nullprogram.com/blog/2018/07/31/
 //!
 
-fn bitmixer32(num: u32) -> u32 {
+fn bitmix32(num: u32) -> u32 {
     // 16 21f0aaad 15 d35a2d97 15
     let mut x = num;
     x ^= x >> 16;
@@ -14,7 +14,7 @@ fn bitmixer32(num: u32) -> u32 {
     x
 }
 
-fn bitmixer32_r(num: u32) -> u32 {
+fn bitmix32_r(num: u32) -> u32 {
     let mut x = num;
     x ^= x >> 16;
     x = x.wrapping_mul(0x43021123_u32);
@@ -24,7 +24,7 @@ fn bitmixer32_r(num: u32) -> u32 {
     x
 }
 
-fn bitmixer64(num: u64) -> u64 {
+fn bitmix64(num: u64) -> u64 {
     let mut x = num;
     x ^= x >> 30;
     x = x.wrapping_mul(0xbf58476d1ce4e5b9_u64);
@@ -34,7 +34,7 @@ fn bitmixer64(num: u64) -> u64 {
     x
 }
 
-fn bitmixer64_r(num: u64) -> u64 {
+fn bitmix64_r(num: u64) -> u64 {
     let mut x = num;
     x ^= x >> 31 ^ x >> 62;
     x = x.wrapping_mul(0x319642b2d24d8ec3_u64);
@@ -51,7 +51,7 @@ mod tests {
     #[test]
     fn is_different32() {
         let num = 42_u32;
-        let result = bitmixer32(num);
+        let result = bitmix32(num);
 
         assert_ne!(num, result);
     }
@@ -59,7 +59,7 @@ mod tests {
     #[test]
     fn is_reversible32() {
         let num = 42_u32;
-        let result = bitmixer32_r(bitmixer32(num));
+        let result = bitmix32_r(bitmix32(num));
 
         assert_eq!(num, result);
     }
@@ -67,7 +67,7 @@ mod tests {
     #[test]
     fn is_different64() {
         let num = 42_u64;
-        let result = bitmixer64(num);
+        let result = bitmix64(num);
 
         assert_ne!(num, result);
     }
@@ -75,7 +75,7 @@ mod tests {
     #[test]
     fn is_reversible64() {
         let num = 42_u64;
-        let result = bitmixer64_r(bitmixer64(num));
+        let result = bitmix64_r(bitmix64(num));
 
         assert_eq!(num, result);
     }
