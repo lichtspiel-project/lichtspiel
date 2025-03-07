@@ -4,7 +4,7 @@
 //!
 //! There are several other combinations of a, b, c and threshold values. See resource above.
 
-use crate::rng::pcg::u64_to_u32_high;
+use crate::rng::util::u64_to_u32_high;
 
 const XORSHIFT_DEFAULT_A: u64 = 11;
 const XORSHIFT_DEFAULT_B: u64 = 31;
