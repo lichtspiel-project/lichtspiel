@@ -49,6 +49,28 @@ impl PCG32 {
             }
         }
     }
+    /// Implementation based on https://www.pcg-random.org/posts/bounded-rands.html
+    pub fn boundedrand_fast(&mut self, bound: u32) -> u32 {
+        let mut x = self.random();
+        let mut m = x as u64 * bound as u64;
+        let mut l = u64_to_u32_low(m);
+
+        if l < bound {
+            let mut t = 0u32.wrapping_sub(bound);
+            if t >= bound {
+                t -= bound;
+                if t >= bound {
+                    t %= bound;
+                }
+            }
+            while l < t {
+                x = self.random();
+                m = x as u64 * bound as u64;
+                l = u64_to_u32_low(m);
+            }
+        }
+        u64_to_u32_high(m)
+    }
 }
 
 fn u64_to_u32_high(num: u64) -> u32 {
@@ -157,6 +179,16 @@ mod tests {
 
         for _ in 0..10 {
             assert!(pcg32.boundedrand(b) <= b)
+        }
+    }
+
+    #[test]
+    fn bounded_fast_works() {
+        let mut pcg32 = PCG32::new();
+        let b = 9373u32;
+
+        for _ in 0..10 {
+            assert!(pcg32.boundedrand_fast(b) <= b)
         }
     }
 }
