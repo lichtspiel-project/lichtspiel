@@ -24,6 +24,21 @@ fn bitmix32_r(num: u32) -> u32 {
     x
 }
 
+/// Update bitmix [16 21f0aaad 15 d35a2d97 15] by https://github.com/skeeto/hash-prospector/issues/19
+///
+/// Unfortunately not figured out the reverse function yet.
+/// https://marc-b-reynolds.github.io/math/2017/10/13/IntegerBijections.html#fnref:modinverse
+/// If reverse is need use one of the other methods.
+fn bitmix(num: u32) -> u32 {
+    let mut x = num;
+    x ^= x >> 16;
+    x = x.wrapping_mul(0x21f0aaad_u32);
+    x ^= x >> 15;
+    x = x.wrapping_mul(0xd35a2d97_u32);
+    x ^= x >> 15;
+    x
+}
+
 fn bitmix64(num: u64) -> u64 {
     let mut x = num;
     x ^= x >> 30;
