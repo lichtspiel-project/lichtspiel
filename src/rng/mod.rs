@@ -23,7 +23,7 @@ impl RNG {
     }
     pub fn random_bitmix(&mut self) -> u32 {
         let v = self.random();
-        bitmixer::bitmix(v)
+        bitmixer::bitmix32(v)
     }
     pub fn bounded_random(&mut self, bound: u32) -> u32 {
         let threshold = 0u32.wrapping_sub(bound) % bound;
