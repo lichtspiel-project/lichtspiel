@@ -45,24 +45,68 @@ fn _bitmix16<const S1: u16, const M1: u16, const S2: u16, const M2: u16, const S
     x
 }
 
+/// Implementation for u16
+///
+/// Source: https://github.com/skeeto/hash-prospector/issues/19
+pub fn bitmix16(num: u16) -> u16 {
+    _bitmix16::<8, 0xa3d3, 7, 0x4b2d, 9>(num)
+}
+
 /// Updated bitmix implementation based on https://github.com/skeeto/hash-prospector/issues/19
 pub fn bitmix32(num: u32) -> u32 {
     _bitmix32::<16, 0x21f0aaad, 15, 0xd35a2d97, 15>(num)
 }
 
-/// Original bitmix implementation in nullprogram: https://nullprogram.com/blog/2018/07/31/
-pub fn bitmix32o(num: u32) -> u32 {
+/// Original bitmix implementation
+///
+/// Values: [15, 0x2c1b3c6d, 12, 0x297a2d39, 15]
+/// Source: https://nullprogram.com/blog/2018/07/31/
+pub fn prospector32(num: u32) -> u32 {
     _bitmix32::<16, 0x7feb352d, 15, 0x846ca68b, 16>(num)
 }
 
-/// Implementation of bitmix for u64
-pub fn bitmix64(num: u64) -> u64 {
-    _bitmix64::<30, 0xbf58476d1ce4e5b9, 27, 0x94d049bb133111eb, 31>(num)
+/// Murmurhash
+///
+/// Values: [16, 0x85ebca6b, 13, 0xc2b2ae35, 16]
+/// Source: https://nullprogram.com/blog/2018/07/31/
+pub fn murmurhash32(num: u32) -> u32 {
+    _bitmix32::<16, 0x85ebca6b, 13, 0xc2b2ae35, 16>(num)
 }
 
-/// Implementation for u16
-pub fn bitmix16(num: u16) -> u16 {
-    _bitmix16::<8, 0xa3d3, 7, 0x4b2d, 9>(num)
+/// Hash32
+///
+/// Values: [16, 0x045d9f3b, 16, 0x045d9f3b, 16]
+/// Source: https://nullprogram.com/blog/2018/07/31/
+pub fn hash32(num: u32) -> u32 {
+    _bitmix32::<16, 0x045d9f3b, 16, 0x045d9f3b, 16>(num)
+}
+
+/// Hash64
+///
+/// Values: [32, 0xd6e8feb86659fd93, 32, 0xd6e8feb86659fd93, 32]
+/// Source: https://nullprogram.com/blog/2018/07/31/
+pub fn hash64(num: u64) -> u64 {
+    _bitmix64::<32, 0xd6e8feb86659fd93, 32, 0xd6e8feb86659fd93, 32>(num)
+}
+
+/// Splittable hash
+///
+/// Values: [30, 0xbf58476d1ce4e5b9, 27, 0x94d049bb133111eb, 31]
+/// Source: https://nullprogram.com/blog/2018/07/31/
+///
+///
+/// The reverse function for future reference:
+///
+/// ```rust
+/// let mut x = 42_u64;
+/// x ^= x >> 31 ^ x >> 62;
+/// x = x.wrapping_mul(0x319642b2d24d8ec3_u64);
+/// x ^= x >> 27 ^ x >> 54;
+/// x = x.wrapping_mul(0x96de1b173f119089_u64);
+/// x ^= x >> 30 ^ x >> 60;
+/// ```
+pub fn splittable64(num: u64) -> u64 {
+    _bitmix64::<30, 0xbf58476d1ce4e5b9, 27, 0x94d049bb133111eb, 31>(num)
 }
 
 #[cfg(test)]
@@ -80,7 +124,7 @@ mod tests {
     #[test]
     fn is_different64() {
         let num = 42_u64;
-        let result = bitmix64(num);
+        let result = splittable64(num);
 
         assert_ne!(num, result);
     }
