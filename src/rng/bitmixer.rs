@@ -6,92 +6,62 @@
 //! https://marc-b-reynolds.github.io/math/2017/10/13/IntegerBijections.html#fnref:modinverse
 //!
 
-/// Const generic implementation of bitmix for u32
-fn _bitmix32<const S1: u32, const M1: u32, const S2: u32, const M2: u32, const S3: u32>(
-    num: u32,
-) -> u32 {
-    let mut x = num;
-    x ^= x >> S1;
-    x = x.wrapping_mul(M1);
-    x ^= x >> S2;
-    x = x.wrapping_mul(M2);
-    x ^= x >> S3;
-    x
+macro_rules! bitmix {
+    ($num:expr, [$s1:expr, $m1:expr, $s2:expr, $m2:expr, $s3:expr]) => {
+        let mut x = $num;
+        x ^= x >> $s1;
+        x = x.wrapping_mul($m1);
+        x ^= x >> $s2;
+        x = x.wrapping_mul($m2);
+        x ^= x >> $s3;
+        return x
+    };
 }
 
-/// Const generic implementation of bitmix for u64
-fn _bitmix64<const S1: u64, const M1: u64, const S2: u64, const M2: u64, const S3: u64>(
-    num: u64,
-) -> u64 {
-    let mut x = num;
-    x ^= x >> S1;
-    x = x.wrapping_mul(M1);
-    x ^= x >> S2;
-    x = x.wrapping_mul(M2);
-    x ^= x >> S3;
-    x
-}
-
-/// Const generic implementation of bitmix for u16
-fn _bitmix16<const S1: u16, const M1: u16, const S2: u16, const M2: u16, const S3: u16>(
-    num: u16,
-) -> u16 {
-    let mut x = num;
-    x ^= x >> S1;
-    x = x.wrapping_mul(M1);
-    x ^= x >> S2;
-    x = x.wrapping_mul(M2);
-    x ^= x >> S3;
-    x
-}
-
-/// Implementation for u16
+/// bitmix scrambling for hashing u16
 ///
 /// Source: https://github.com/skeeto/hash-prospector/issues/19
 pub fn bitmix16(num: u16) -> u16 {
-    _bitmix16::<8, 0xa3d3, 7, 0x4b2d, 9>(num)
+    bitmix!(num, [8, 0xa3d3, 7, 0x4b2d, 9]);
 }
 
-/// Updated bitmix implementation based on https://github.com/skeeto/hash-prospector/issues/19
+/// bitmix scrambling for hashing u32
+///
+/// Source: https://github.com/skeeto/hash-prospector/issues/19
 pub fn bitmix32(num: u32) -> u32 {
-    _bitmix32::<16, 0x21f0aaad, 15, 0xd35a2d97, 15>(num)
+    bitmix!(num, [16, 0x21f0aaad, 15, 0xd35a2d97, 15]);
 }
 
-/// Original bitmix implementation
+/// bitmix scrambling for hashing u32 (prospector variant)
 ///
-/// Values: [15, 0x2c1b3c6d, 12, 0x297a2d39, 15]
 /// Source: https://nullprogram.com/blog/2018/07/31/
-pub fn prospector32(num: u32) -> u32 {
-    _bitmix32::<16, 0x7feb352d, 15, 0x846ca68b, 16>(num)
+pub fn bitmix32p(num: u32) -> u32 {
+    bitmix!(num, [16, 0x7feb352d, 15, 0x846ca68b, 16]);
 }
 
-/// Murmurhash
+/// bitmix scrambling for hashing u32 (murmurhash variant)
 ///
-/// Values: [16, 0x85ebca6b, 13, 0xc2b2ae35, 16]
 /// Source: https://nullprogram.com/blog/2018/07/31/
 pub fn murmurhash32(num: u32) -> u32 {
-    _bitmix32::<16, 0x85ebca6b, 13, 0xc2b2ae35, 16>(num)
+    bitmix!(num, [16, 0x85ebca6b, 13, 0xc2b2ae35, 16]);
 }
 
-/// Hash32
+/// bitmix scrambling for hashing u32 (hash32)
 ///
-/// Values: [16, 0x045d9f3b, 16, 0x045d9f3b, 16]
 /// Source: https://nullprogram.com/blog/2018/07/31/
 pub fn hash32(num: u32) -> u32 {
-    _bitmix32::<16, 0x045d9f3b, 16, 0x045d9f3b, 16>(num)
+    bitmix!(num, [16, 0x045d9f3b, 16, 0x045d9f3b, 16]);
 }
 
-/// Hash64
+/// bitmix scrambling for hashing u64
 ///
-/// Values: [32, 0xd6e8feb86659fd93, 32, 0xd6e8feb86659fd93, 32]
 /// Source: https://nullprogram.com/blog/2018/07/31/
-pub fn hash64(num: u64) -> u64 {
-    _bitmix64::<32, 0xd6e8feb86659fd93, 32, 0xd6e8feb86659fd93, 32>(num)
+pub fn bitmix64(num: u64) -> u64 {
+    bitmix!(num, [32, 0xd6e8feb86659fd93, 32, 0xd6e8feb86659fd93, 32]);
 }
 
-/// Splittable hash
+/// bitmix scrambling for hashing u64 (splittable variant)
 ///
-/// Values: [30, 0xbf58476d1ce4e5b9, 27, 0x94d049bb133111eb, 31]
 /// Source: https://nullprogram.com/blog/2018/07/31/
 ///
 ///
@@ -105,8 +75,8 @@ pub fn hash64(num: u64) -> u64 {
 /// x = x.wrapping_mul(0x96de1b173f119089_u64);
 /// x ^= x >> 30 ^ x >> 60;
 /// ```
-pub fn splittable64(num: u64) -> u64 {
-    _bitmix64::<30, 0xbf58476d1ce4e5b9, 27, 0x94d049bb133111eb, 31>(num)
+pub fn bitmix64s(num: u64) -> u64 {
+    bitmix!(num, [30, 0xbf58476d1ce4e5b9, 27, 0x94d049bb133111eb, 31]);
 }
 
 #[cfg(test)]
@@ -124,7 +94,7 @@ mod tests {
     #[test]
     fn is_different64() {
         let num = 42_u64;
-        let result = splittable64(num);
+        let result = bitmix64s(num);
 
         assert_ne!(num, result);
     }
