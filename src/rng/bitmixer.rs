@@ -63,18 +63,6 @@ pub fn bitmix64(num: u64) -> u64 {
 /// bitmix scrambling for hashing u64 (splittable variant)
 ///
 /// Source: https://nullprogram.com/blog/2018/07/31/
-///
-///
-/// The reverse function for future reference:
-///
-/// ```rust
-/// let mut x = 42_u64;
-/// x ^= x >> 31 ^ x >> 62;
-/// x = x.wrapping_mul(0x319642b2d24d8ec3_u64);
-/// x ^= x >> 27 ^ x >> 54;
-/// x = x.wrapping_mul(0x96de1b173f119089_u64);
-/// x ^= x >> 30 ^ x >> 60;
-/// ```
 pub fn bitmix64s(num: u64) -> u64 {
     bitmix!(num, [30, 0xbf58476d1ce4e5b9, 27, 0x94d049bb133111eb, 31]);
 }

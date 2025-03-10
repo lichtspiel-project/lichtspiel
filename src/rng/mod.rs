@@ -1,7 +1,25 @@
 pub mod bitmixer;
 pub mod pcg;
 pub mod util;
+pub mod xoroshiro;
 pub mod xorshift;
+
+trait R64 {
+    fn random_u64(&mut self) -> u64;
+    fn random_u32(&mut self) -> u32 {
+        let num = self.random_u64();
+        (num >> 32) as u32
+    }
+}
+
+trait R32 {
+    fn random_u32(&mut self) -> u32;
+    fn random_u64(&mut self) -> u64 {
+        let x = self.random_u32() as u64;
+        let y = self.random_u32() as u64;
+        (x << 32) | y
+    }
+}
 
 pub enum RNG {
     PCG32(pcg::PCG32),
