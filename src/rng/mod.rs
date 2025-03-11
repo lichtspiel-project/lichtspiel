@@ -3,6 +3,7 @@ pub mod pcg;
 pub mod util;
 pub mod xoroshiro;
 pub mod xorshift;
+pub mod xoshiro;
 
 trait R64 {
     fn random_u64(&mut self) -> u64;
