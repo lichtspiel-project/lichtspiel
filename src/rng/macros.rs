@@ -39,3 +39,33 @@ macro_rules! xoroshiro_starstar {
         $s0.wrapping_mul($s).rotate_left($r).wrapping_mul($t)
     };
 }
+
+/// Macro for advancing in four state xoshiro
+macro_rules! advance_xoshiro_4state {
+    ($state:expr, [$a:expr, $b:expr]) => {
+        let t = $state[0] << $a;
+        $state[2] ^= $state[0];
+        $state[3] ^= $state[1];
+        $state[1] ^= $state[2];
+        $state[0] ^= $state[3];
+        $state[2] ^= t;
+        $state[3] = $state[3].rotate_left($b);
+    };
+}
+
+/// Macro for advancing in eight state xoshiro
+macro_rules! advance_xoshiro_8state {
+    ($state:expr, [$a:expr, $b:expr]) => {
+        let t = $state[0] << $a;
+        $state[2] ^= $state[0];
+        $state[5] ^= $state[1];
+        $state[1] ^= $state[2];
+        $state[7] ^= $state[3];
+        $state[3] ^= $state[4];
+        $state[4] ^= $state[5];
+        $state[0] ^= $state[6];
+        $state[6] ^= $state[7];
+        $state[6] ^= t;
+        $state[7] = $state[7].rotate_left($b);
+    };
+}
