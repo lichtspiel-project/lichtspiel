@@ -20,6 +20,21 @@ macro_rules! advance_p_xoroshiro_1024 {
     }};
 }
 
+struct Xoroshiro1024 {
+    state: [u64; 16],
+    p: usize,
+}
+
+impl R64 for Xoroshiro1024 {
+    fn random_u64(&mut self) -> u64 {
+        let (q, s0, s15) = advance_p_xoroshiro_1024!(self);
+
+        let result = s0;
+        advance_state_xoroshiro_1024!(self, q, s0, s15, [25, 27, 36]);
+        result
+    }
+}
+
 struct Xoroshiro1024plus {
     state: [u64; 16],
     p: usize,
