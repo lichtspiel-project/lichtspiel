@@ -49,3 +49,33 @@ impl R64 for Xoroshiro1024plus {
         result
     }
 }
+
+struct Xoroshiro1024star {
+    state: [u64; 16],
+    p: usize,
+}
+
+impl R64 for Xoroshiro1024star {
+    fn random_u64(&mut self) -> u64 {
+        let (q, s0, s15) = advance_p_xoroshiro_1024!(self);
+
+        let result = xoroshiro_star!(s0, [0x9e3779b97f4a7c13]);
+        advance_state_xoroshiro_1024!(self, q, s0, s15, [25, 27, 36]);
+        result
+    }
+}
+
+struct Xoroshiro1024starstar {
+    state: [u64; 16],
+    p: usize,
+}
+
+impl R64 for Xoroshiro1024starstar {
+    fn random_u64(&mut self) -> u64 {
+        let (q, s0, s15) = advance_p_xoroshiro_1024!(self);
+
+        let result = xoroshiro_starstar!(s0, [5, 7, 9]);
+        advance_state_xoroshiro_1024!(self, q, s0, s15, [25, 27, 36]);
+        result
+    }
+}
