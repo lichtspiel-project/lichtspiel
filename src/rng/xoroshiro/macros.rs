@@ -1,4 +1,9 @@
-/// Macro for updating the state in xoroshiro with state <= 128
+//! # Scramblers
+//!
+//! Implementation of the scramblers defined in the Xoroshiro/xoroshi paper
+//! as well as the state updates
+
+/// Macro for updating the state in xoroshiro with state <= 128P
 macro_rules! advance_xoroshiro_two_state {
     ($s0:expr, $s1:expr, [$a:expr, $b:expr, $c:expr]) => {
         let state = $s1 ^ $s0;
