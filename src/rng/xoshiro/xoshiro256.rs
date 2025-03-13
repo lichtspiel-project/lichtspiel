@@ -36,25 +36,13 @@ impl R64 for Xoshiro256plusplus {
     }
 }
 
-struct Xoshiro256star {
-    state: [u64; 4],
-}
-
-impl R64 for Xoshiro256star {
-    fn random_u64(&mut self) -> u64 {
-        let result = xoroshiro_star!(self.state[0], [0x9e3779b97f4a7c13]);
-        advance_xoshiro_4state!(self.state, [17, 45]);
-        result
-    }
-}
-
 struct Xoshiro256starstar {
     state: [u64; 4],
 }
 
 impl R64 for Xoshiro256starstar {
     fn random_u64(&mut self) -> u64 {
-        let result = xoroshiro_starstar!(self.state[0], [5, 7, 9]);
+        let result = xoroshiro_starstar!(self.state[1], [5, 7, 9]);
         advance_xoshiro_4state!(self.state, [17, 45]);
         result
     }
