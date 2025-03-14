@@ -59,8 +59,25 @@ impl R32 for Xoshiro128plus {
     }
 }
 
+#[derive(PartialEq, Debug)]
 struct Xoshiro128plusplus {
     state: [u32; 4],
+}
+
+impl Xoshiro128plusplus {
+    fn new(state: [u32; 4]) -> Self {
+        init_with_state!(state)
+    }
+    fn with(seed: u64) -> Self {
+        let state = get_state_from_splitmix!(4, seed, u32);
+        Self::new(state)
+    }
+}
+
+impl Default for Xoshiro128plusplus {
+    fn default() -> Self {
+        Self::with(0)
+    }
 }
 
 impl R32 for Xoshiro128plusplus {
@@ -107,12 +124,24 @@ mod tests {
         assert_eq!(rng1, rng2);
         assert_ne!(rng2, rng3);
     }
+    #[test]
+    fn check_equality_plusplus() {
+        let rngd = Xoshiro128plusplus::default();
+        let rng1 = Xoshiro128plusplus::with(0);
+        let rng2 = Xoshiro128plusplus::new([0, 0, 0, 0]);
+        let rng3 = Xoshiro128plusplus::new([0, 2, 0, 0]);
+        assert_eq!(rngd, rng1);
+        assert_eq!(rng1, rng2);
+        assert_ne!(rng2, rng3);
+    }
 
     #[test]
     fn check_first_5_plain() {
-        // test_first_5!(Xoshiro128, 1, [0, 0, 0, 0, 0], u32);
         // test_first_5!(Xoshiro128, 1, [0, 0, 0, 0, 0], u64);
+        // test_first_5!(Xoshiro128, 1, [0, 0, 0, 0, 0], u32);
         // test_first_5!(Xoshiro128plus, 1, [0, 0, 0, 0, 0], u64);
-        // test_first_5!(Xoshiro128plus, 1, [0, 0, 0, 0, 0], u64);
+        // test_first_5!(Xoshiro128plus, 1, [0, 0, 0, 0, 0], u32);
+        // test_first_5!(Xoshiro128plusplus, 1, [0, 0, 0, 0, 0], u64);
+        // test_first_5!(Xoshiro128plusplus, 1, [0, 0, 0, 0, 0], u32);
     }
 }
