@@ -36,7 +36,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn init() {
+    fn check_first_5() {
         let s = 1234567;
 
         test_first_5!(

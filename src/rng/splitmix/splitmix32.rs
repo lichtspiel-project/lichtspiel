@@ -30,7 +30,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn init() {
+    fn check_first_5() {
         let s = 1234567;
 
         test_first_5!(
@@ -39,5 +39,15 @@ mod tests {
             [4101310354, 1937531806, 3079499796, 1553139234, 1247708653],
             u32
         );
+    }
+
+    #[test]
+    fn zero_seed() {
+        let s = 0;
+        let mut rng32 = SplitMix32::with(s);
+        let mut rng64 = SplitMix32::with(s);
+
+        assert_ne!(rng64.random_u32(), 0);
+        assert_ne!(rng32.random_u32(), 0);
     }
 }

@@ -81,25 +81,6 @@ macro_rules! splitmix {
     }};
 }
 
-macro_rules! test_first_5 {
-    ($struct:ident, $seed:expr, [$e0:expr,$e1:expr,$e2:expr,$e3:expr,$e4:expr], u32) => {
-        let mut rng = $struct::with($seed);
-        assert_eq!(rng.random_u32(), $e0);
-        assert_eq!(rng.random_u32(), $e1);
-        assert_eq!(rng.random_u32(), $e2);
-        assert_eq!(rng.random_u32(), $e3);
-        assert_eq!(rng.random_u32(), $e4);
-    };
-    ($struct:ident, $seed:expr, [$e0:expr,$e1:expr,$e2:expr,$e3:expr,$e4:expr], u64) => {
-        let mut rng = $struct::with($seed);
-        assert_eq!(rng.random_u64(), $e0);
-        assert_eq!(rng.random_u64(), $e1);
-        assert_eq!(rng.random_u64(), $e2);
-        assert_eq!(rng.random_u64(), $e3);
-        assert_eq!(rng.random_u64(), $e4);
-    };
-}
-
 /// Macro to check if an iterator has all zeros (all zero state needs to be avoid by some RNG)
 macro_rules! not_all_zeros {
     ($iter:expr) => {
@@ -134,5 +115,25 @@ macro_rules! init_with_state {
         } else {
             Self::with(0)
         }
+    };
+}
+
+#[cfg(test)]
+macro_rules! test_first_5 {
+    ($struct:ident, $seed:expr, [$e0:expr,$e1:expr,$e2:expr,$e3:expr,$e4:expr], u32) => {
+        let mut rng = $struct::with($seed);
+        assert_eq!(rng.random_u32(), $e0);
+        assert_eq!(rng.random_u32(), $e1);
+        assert_eq!(rng.random_u32(), $e2);
+        assert_eq!(rng.random_u32(), $e3);
+        assert_eq!(rng.random_u32(), $e4);
+    };
+    ($struct:ident, $seed:expr, [$e0:expr,$e1:expr,$e2:expr,$e3:expr,$e4:expr], u64) => {
+        let mut rng = $struct::with($seed);
+        assert_eq!(rng.random_u64(), $e0);
+        assert_eq!(rng.random_u64(), $e1);
+        assert_eq!(rng.random_u64(), $e2);
+        assert_eq!(rng.random_u64(), $e3);
+        assert_eq!(rng.random_u64(), $e4);
     };
 }
