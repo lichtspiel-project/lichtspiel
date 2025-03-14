@@ -81,8 +81,8 @@ macro_rules! splitmix {
     }};
 }
 
-macro_rules! test_first_5_u32 {
-    ($struct:ident, $seed:expr, [$e0:expr,$e1:expr,$e2:expr,$e3:expr,$e4:expr]) => {
+macro_rules! test_first_5 {
+    ($struct:ident, $seed:expr, [$e0:expr,$e1:expr,$e2:expr,$e3:expr,$e4:expr], u32) => {
         let mut rng = $struct::with($seed);
         assert_eq!(rng.random_u32(), $e0);
         assert_eq!(rng.random_u32(), $e1);
@@ -90,10 +90,7 @@ macro_rules! test_first_5_u32 {
         assert_eq!(rng.random_u32(), $e3);
         assert_eq!(rng.random_u32(), $e4);
     };
-}
-
-macro_rules! test_first_5_u64 {
-    ($struct:ident, $seed:expr, [$e0:expr,$e1:expr,$e2:expr,$e3:expr,$e4:expr]) => {
+    ($struct:ident, $seed:expr, [$e0:expr,$e1:expr,$e2:expr,$e3:expr,$e4:expr], u64) => {
         let mut rng = $struct::with($seed);
         assert_eq!(rng.random_u64(), $e0);
         assert_eq!(rng.random_u64(), $e1);
@@ -101,4 +98,31 @@ macro_rules! test_first_5_u64 {
         assert_eq!(rng.random_u64(), $e3);
         assert_eq!(rng.random_u64(), $e4);
     };
+}
+
+/// Macro to check if an iterator has all zeros (all zero state needs to be avoid by some RNG)
+macro_rules! not_all_zeros {
+    ($iter:expr) => {
+        !$iter.iter().all(|&x| x == 0)
+    };
+}
+
+/// Macro to get a state of certain size using splitmix
+macro_rules! get_state_from_splitmix {
+    ($count:expr, $seed:expr, u32) => {{
+        let mut rng = SplitMix64::with($seed);
+        let mut result = [0u32; $count];
+        for v in result.iter_mut() {
+            *v = rng.random_u32();
+        }
+        result
+    }};
+    ($count:expr, $seed:expr, u64) => {{
+        let mut rng = SplitMix64::with($seed);
+        let mut result = [0u64; $count];
+        for v in result.iter_mut() {
+            *v = rng.random_u64();
+        }
+        result
+    }};
 }

@@ -1,2 +1,2 @@
-mod splitmix32;
-mod splitmix64;
+pub mod splitmix32;
+pub mod splitmix64;

@@ -10,7 +10,7 @@ use crate::rng::R64;
 // See https://softwareengineering.stackexchange.com/a/402543
 const GOLDEN_RATIO: u64 = 0x9e3779b97f4a7c15; // prime version: 0x9e3779b97f4a7c55;
 
-struct SplitMix64 {
+pub struct SplitMix64 {
     state: u64,
 }
 
@@ -39,7 +39,7 @@ mod tests {
     fn init() {
         let s = 1234567;
 
-        test_first_5_u64!(
+        test_first_5!(
             SplitMix64,
             s,
             [
@@ -48,7 +48,18 @@ mod tests {
                 9817491932198370423,
                 4593380528125082431,
                 16408922859458223821
-            ]
+            ],
+            u64
         );
+    }
+
+    #[test]
+    fn zero_seed() {
+        let s = 0;
+        let mut rng32 = SplitMix64::with(s);
+        let mut rng64 = SplitMix64::with(s);
+
+        assert_ne!(rng64.random_u64(), 0);
+        assert_ne!(rng32.random_u64(), 0);
     }
 }
