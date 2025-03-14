@@ -69,3 +69,36 @@ macro_rules! advance_xoshiro_8state {
         $state[7] = $state[7].rotate_left($b);
     };
 }
+
+/// Macro for a parameterized splitmix algorithm
+macro_rules! splitmix {
+    ($x:expr, [$s0:expr, $s1:expr, $s2:expr], [$m0:expr, $m1:expr]) => {{
+        let mut z = $x;
+        z = (z ^ (z >> $s0)).wrapping_mul($m0);
+        z = (z ^ (z >> $s1)).wrapping_mul($m1);
+        z = z ^ (z >> $s2);
+        z
+    }};
+}
+
+macro_rules! test_first_5_u32 {
+    ($struct:ident, $seed:expr, [$e0:expr,$e1:expr,$e2:expr,$e3:expr,$e4:expr]) => {
+        let mut rng = $struct::with($seed);
+        assert_eq!(rng.random_u32(), $e0);
+        assert_eq!(rng.random_u32(), $e1);
+        assert_eq!(rng.random_u32(), $e2);
+        assert_eq!(rng.random_u32(), $e3);
+        assert_eq!(rng.random_u32(), $e4);
+    };
+}
+
+macro_rules! test_first_5_u64 {
+    ($struct:ident, $seed:expr, [$e0:expr,$e1:expr,$e2:expr,$e3:expr,$e4:expr]) => {
+        let mut rng = $struct::with($seed);
+        assert_eq!(rng.random_u64(), $e0);
+        assert_eq!(rng.random_u64(), $e1);
+        assert_eq!(rng.random_u64(), $e2);
+        assert_eq!(rng.random_u64(), $e3);
+        assert_eq!(rng.random_u64(), $e4);
+    };
+}
