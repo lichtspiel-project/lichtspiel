@@ -4,8 +4,6 @@
 //!
 //! There are several other combinations of a, b, c and threshold values. See resource above.
 
-use crate::rng::util::u64_to_u32_high;
-
 pub struct GenXorshiftStar<const A: u64, const B: u64, const C: u64, const T: u64> {
     state: u64,
 }
@@ -22,7 +20,7 @@ impl<const A: u64, const B: u64, const C: u64, const T: u64> GenXorshiftStar<A, 
     pub fn random(&mut self) -> u32 {
         let result = self.state.wrapping_mul(T);
         self.advance();
-        u64_to_u32_high(result)
+        (result >> 32) as u32
     }
 }
 

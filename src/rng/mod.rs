@@ -3,7 +3,6 @@ mod macros;
 pub mod bitmixer;
 pub mod pcg;
 pub mod splitmix;
-pub mod util;
 pub mod xoroshiro;
 pub mod xorshift;
 pub mod xoshiro;
@@ -60,7 +59,7 @@ impl RNG {
     pub fn bounded_random_fast(&mut self, bound: u32) -> u32 {
         let mut x = self.random();
         let mut m = x as u64 * bound as u64;
-        let mut l = util::u64_to_u32_low(m);
+        let mut l = m as u32;
 
         if l < bound {
             let mut t = 0u32.wrapping_sub(bound);
@@ -73,10 +72,10 @@ impl RNG {
             while l < t {
                 x = self.random();
                 m = x as u64 * bound as u64;
-                l = util::u64_to_u32_low(m);
+                l = m as u32;
             }
         }
-        util::u64_to_u32_high(m)
+        (m >> 32) as u32
     }
 }
 
