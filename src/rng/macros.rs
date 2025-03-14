@@ -126,3 +126,13 @@ macro_rules! get_state_from_splitmix {
         result
     }};
 }
+
+macro_rules! init_with_state {
+    ($state:expr) => {
+        if not_all_zeros!($state) {
+            Self { state: $state }
+        } else {
+            Self::with(0)
+        }
+    };
+}
