@@ -1,7 +1,28 @@
-use crate::rng::R32;
+use crate::rng::splitmix::splitmix64::SplitMix64;
+use crate::rng::{R32, R64};
 
 struct Xoshiro128 {
     state: [u32; 4],
+}
+
+impl Xoshiro128 {
+    fn new(state: [u32; 4]) -> Self {
+        if not_all_zeros!(state) {
+            Xoshiro128 { state }
+        } else {
+            Xoshiro128::with(0)
+        }
+    }
+    fn with(seed: u64) -> Self {
+        let state = get_state_from_splitmix!(4, seed, u32);
+        Xoshiro128::new(state)
+    }
+}
+
+impl Default for Xoshiro128 {
+    fn default() -> Self {
+        Xoshiro128::with(0)
+    }
 }
 
 impl R32 for Xoshiro128 {
