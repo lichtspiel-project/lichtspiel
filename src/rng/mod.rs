@@ -1,6 +1,7 @@
 #[macro_use]
 mod macros;
 pub mod bitmixer;
+pub mod float;
 pub mod pcg;
 pub mod splitmix;
 pub mod xoroshiro;
