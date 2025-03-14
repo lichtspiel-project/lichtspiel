@@ -1,6 +1,7 @@
 use crate::rng::splitmix::splitmix64::SplitMix64;
 use crate::rng::{R32, R64};
 
+#[derive(PartialEq, Debug)]
 struct Xoshiro128 {
     state: [u32; 4],
 }
@@ -66,5 +67,27 @@ impl R32 for Xoshiro128starstar {
         let result = xoroshiro_starstar!(self.state[1], [5, 7, 9]);
         advance_xoshiro_4state!(self.state, [9, 11]);
         result
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn check_equality_plain() {
+        let rngd = Xoshiro128::default();
+        let rng1 = Xoshiro128::with(0);
+        let rng2 = Xoshiro128::new([0, 0, 0, 0]);
+        let rng3 = Xoshiro128::new([0, 2, 0, 0]);
+        assert_eq!(rngd, rng1);
+        assert_eq!(rng1, rng2);
+        assert_ne!(rng2, rng3);
+    }
+
+    #[test]
+    fn check_first_5_plain() {
+        // test_first_5!(Xoshiro128, 1, [0, 0, 0, 0, 0], u32);
+        // test_first_5!(Xoshiro128, 1, [0, 0, 0, 0, 0], u64);
     }
 }
