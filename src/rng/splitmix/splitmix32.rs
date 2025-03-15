@@ -2,8 +2,7 @@
 //!
 //! Implementation of a fast random number generator.
 //! Most often this RNG is recommended to generate a seed for other RNGs.
-use crate::rng::R32;
-
+use crate::rng::core::R32;
 // Closes prime to the Golden Ratio constant used for better scattering
 // See https://softwareengineering.stackexchange.com/a/402543
 const GOLDEN_RATIO: u32 = 0x9e3779b9; // prime version 0x9e3779b1;

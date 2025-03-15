@@ -1,5 +1,4 @@
-use crate::rng::R64;
-
+use crate::rng::core::R64;
 macro_rules! advance_state_xoroshiro_1024 {
     ($self:expr, $q:expr, $s0:expr, $s15:expr, [$a:expr, $b:expr, $c:expr]) => {
         let s15 = $s15 ^ $s0;

@@ -1,5 +1,4 @@
-use crate::rng::R64;
-
+use crate::rng::core::R64;
 pub struct Xoroshiro128 {
     s0: u64,
     s1: u64,

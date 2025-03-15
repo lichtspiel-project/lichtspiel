@@ -1,5 +1,5 @@
+use crate::rng::core::{R32, R64};
 use crate::rng::splitmix::splitmix64::SplitMix64;
-use crate::rng::{R32, R64};
 
 #[derive(PartialEq, Debug)]
 struct Xoshiro128 {

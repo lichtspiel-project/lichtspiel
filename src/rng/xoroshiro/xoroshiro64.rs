@@ -1,5 +1,4 @@
-use crate::rng::R32;
-
+use crate::rng::core::R32;
 pub struct Xoroshiro64 {
     s0: u32,
     s1: u32,

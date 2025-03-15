@@ -1,4 +1,4 @@
-use crate::rng::R64;
+use crate::rng::core::R64;
 
 struct Xoshiro256 {
     state: [u64; 4],

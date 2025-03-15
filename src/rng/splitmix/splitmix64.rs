@@ -4,8 +4,7 @@
 //! Most often this RNG is recommended to generate a seed for other RNGs.
 //! This implementation of the algorithm used the following source as reference:
 //! https://xoshiro.di.unimi.it/splitmix64.c
-use crate::rng::R64;
-
+use crate::rng::core::R64;
 // Closes prime to the Golden Ratio constant used for better scattering
 // See https://softwareengineering.stackexchange.com/a/402543
 const GOLDEN_RATIO: u64 = 0x9e3779b97f4a7c15; // prime version: 0x9e3779b97f4a7c55;
