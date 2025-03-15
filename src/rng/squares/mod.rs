@@ -111,6 +111,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn test_billion_u64() {
         let billion = 1_000_000_000_usize;
         let ctr = 0_u64;
@@ -123,8 +124,9 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn test_million_u32() {
-        let million = 1_000_000usize;
+        let million = 1_000_000_usize;
         let ctr = 0_u64;
         let key = 0x548c9decbce65297_u64;
         let mut r = Squares::new(ctr, key);

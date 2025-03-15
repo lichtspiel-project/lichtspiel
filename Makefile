@@ -7,6 +7,9 @@ debug:
 test:
 	cargo test
 
+test-ignored:
+	cargo test -- --ignored
+
 bench:
 	cargo bench
 
@@ -22,4 +25,4 @@ run:
 clean:
 	rm -rf target/*
 
-.PHONY: release debug test bench publish-dry-run publish run clean
+.PHONY: release debug test test-ignored bench publish-dry-run publish run clean
