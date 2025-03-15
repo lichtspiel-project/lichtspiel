@@ -3,22 +3,22 @@
 //! Casting to float based on strategies defined in https://mumble.net/~campbell/tmp/random_real.c
 
 /// Cast using all bits
-fn random_real_64(num: u64) -> f64 {
+pub fn random_real_64(num: u64) -> f64 {
     num as f64 / u64::MAX as f64
 }
 
 /// Cast using only the 53 MSB
-fn random_real_53(num: u64) -> f64 {
+pub fn random_real_53(num: u64) -> f64 {
     (num >> 11) as f64 / (1u64 << 53) as f64
 }
 
 /// Cast using all bits
-fn random_real_32(num: u32) -> f32 {
+pub fn random_real_32(num: u32) -> f32 {
     num as f32 / u32::MAX as f32
 }
 
 /// Cast using only the 24 MSB
-fn random_real_24(num: u32) -> f32 {
+pub fn random_real_24(num: u32) -> f32 {
     (num >> 8) as f32 / (1u32 << 24) as f32
 }
 
