@@ -1,4 +1,4 @@
-use super::{bitmixer, pcg, xorshift};
+use super::{bitmixer, pcg, squares, xorshift};
 
 pub trait R64 {
     fn random_u64(&mut self) -> u64;
@@ -20,6 +20,7 @@ pub trait R32 {
 pub enum RNG {
     PCG32(pcg::PCG32),
     XorshiftStar(xorshift::XorshiftStar32),
+    Squares(squares::Squares),
 }
 
 impl RNG {
@@ -29,10 +30,14 @@ impl RNG {
     pub fn with_xorshift() -> Self {
         RNG::XorshiftStar(xorshift::XorshiftStar32::new())
     }
+    pub fn with_squares() -> Self {
+        RNG::Squares(squares::Squares::default())
+    }
     pub fn random(&mut self) -> u32 {
         match self {
             RNG::PCG32(pcg) => pcg.random(),
             RNG::XorshiftStar(xorshift) => xorshift.random(),
+            RNG::Squares(sq) => sq.random_u32(),
         }
     }
     pub fn random_bitmix(&mut self) -> u32 {

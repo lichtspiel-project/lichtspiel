@@ -2,7 +2,7 @@ use super::core::R64;
 use crate::rng::splitmix::splitmix64::SplitMix64;
 
 #[derive(Debug, PartialEq)]
-struct Squares {
+pub struct Squares {
     ctr: u64,
     key: u64,
 }

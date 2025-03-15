@@ -18,7 +18,7 @@ Now there can be several performances tests run.
 - Compare throughput between algorithms e.g. rng and xorshiftstar
 
     ```bash
-    hyperfine --warmup 3 'rng | head -n 999999' 'xorshiftstar | head -n 999999'
+    hyperfine --warmup 3 'rng xor | head -c 999999' 'rng pcg | head -c 999999'
     ```
 
 - Compare statistical stability of the RNG e.g. xorshiftstar
