@@ -4,16 +4,17 @@
 //! Most often this RNG is recommended to generate a seed for other RNGs.
 //! This implementation of the algorithm used the following source as reference:
 //! https://xoshiro.di.unimi.it/splitmix64.c
-use crate::rng::core::R64;
-// Closes prime to the Golden Ratio constant used for better scattering
-// See https://softwareengineering.stackexchange.com/a/402543
-const GOLDEN_RATIO: u64 = 0x9e3779b97f4a7c15; // prime version: 0x9e3779b97f4a7c55;
+use crate::rng::core::Rng;
 
+/// Golden Ratio, prime version: 0x9e3779b97f4a7c55;
+const GOLDEN_RATIO: u64 = 0x9e3779b97f4a7c15;
+
+#[derive(Debug, PartialEq)]
 pub struct SplitMix64 {
     state: u64,
 }
 
-impl R64 for SplitMix64 {
+impl Rng for SplitMix64 {
     fn random_u64(&mut self) -> u64 {
         self.state = self.state.wrapping_add(GOLDEN_RATIO);
         splitmix!(
@@ -22,11 +23,11 @@ impl R64 for SplitMix64 {
             [0xbf58476d1ce4e5b9, 0x94d049bb133111eb]
         )
     }
-}
-
-impl SplitMix64 {
-    pub fn with(state: u64) -> Self {
-        SplitMix64 { state }
+    fn random_u32(&mut self) -> u32 {
+        crate::rng::core::random_u32_from_u64(self)
+    }
+    fn with_seed(seed: u64) -> Self {
+        Self { state: seed }
     }
 }
 
@@ -55,8 +56,8 @@ mod tests {
     #[test]
     fn zero_seed() {
         let s = 0;
-        let mut rng32 = SplitMix64::with(s);
-        let mut rng64 = SplitMix64::with(s);
+        let mut rng32 = SplitMix64::with_seed(s);
+        let mut rng64 = SplitMix64::with_seed(s);
 
         assert_ne!(rng64.random_u64(), 0);
         assert_ne!(rng32.random_u64(), 0);

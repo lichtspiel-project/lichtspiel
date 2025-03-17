@@ -1,5 +1,4 @@
-use super::core::R64;
-use crate::rng::splitmix::splitmix64::SplitMix64;
+use super::core::Rng;
 
 #[derive(Debug, PartialEq)]
 pub struct Squares {
@@ -7,7 +6,7 @@ pub struct Squares {
     key: u64,
 }
 
-impl R64 for Squares {
+impl Rng for Squares {
     fn random_u32(&mut self) -> u32 {
         let mut x = self.ctr.wrapping_mul(self.key);
         let y = x;
@@ -34,6 +33,26 @@ impl R64 for Squares {
 
         x.rotate_left(32) ^ (x.wrapping_mul(x).wrapping_add(y) >> 32)
     }
+    fn with_rng<R: Rng>(rng: &mut R) -> Self {
+        let ctr = 0;
+        let key = rng.random_u64();
+        Self { ctr, key }
+    }
+    fn with_seed(seed: u64) -> Self {
+        if seed != 0 {
+            Self { ctr: 0, key: seed }
+        } else {
+            let state = get_state_from_splitmix!(1, seed, u64);
+            let key = state[0];
+            Self::new(0, key)
+        }
+    }
+}
+
+impl Default for Squares {
+    fn default() -> Self {
+        Self::with_seed(0)
+    }
 }
 
 impl Squares {
@@ -41,19 +60,8 @@ impl Squares {
         if key != 0 {
             Self { ctr, key }
         } else {
-            Self::with(0)
+            Self::with_seed(0)
         }
-    }
-    fn with(seed: u64) -> Self {
-        let state = get_state_from_splitmix!(1, seed, u64);
-        let key = state[0];
-        Self { ctr: 0, key }
-    }
-}
-
-impl Default for Squares {
-    fn default() -> Self {
-        Self::with(0)
     }
 }
 
@@ -139,7 +147,7 @@ mod tests {
     #[test]
     fn check_equality() {
         let rngd = Squares::default();
-        let rng1 = Squares::with(0);
+        let rng1 = Squares::with_seed(0);
         let rng2 = Squares::new(0, 0);
         let rng3 = Squares::new(0, 4);
         assert_eq!(rngd, rng1);

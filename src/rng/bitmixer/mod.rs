@@ -6,6 +6,7 @@
 //! https://marc-b-reynolds.github.io/math/2017/10/13/IntegerBijections.html#fnref:modinverse
 //!
 
+/// General bitmix macro for generation of bitmix transformations
 macro_rules! bitmix {
     ($num:expr, [$s1:expr, $m1:expr, $s2:expr, $m2:expr, $s3:expr]) => {
         let mut x = $num;

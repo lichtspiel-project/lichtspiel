@@ -1,20 +1,22 @@
 use super::{bitmixer, pcg, squares, xorshift};
 
-pub trait R64 {
+pub trait Rng: Sized {
     fn random_u64(&mut self) -> u64;
-    fn random_u32(&mut self) -> u32 {
-        let num = self.random_u64();
-        (num >> 32) as u32
+    fn random_u32(&mut self) -> u32;
+    fn with_seed(seed: u64) -> Self;
+    fn with_rng<R: Rng>(rng: &mut R) -> Self {
+        Self::with_seed(rng.random_u64())
     }
 }
 
-pub trait R32 {
-    fn random_u32(&mut self) -> u32;
-    fn random_u64(&mut self) -> u64 {
-        let x = self.random_u32() as u64;
-        let y = self.random_u32() as u64;
-        (x << 32) | y
-    }
+pub(crate) fn random_u64_from_u32<R: Rng>(rng: &mut R) -> u64 {
+    let v1 = rng.random_u32() as u64;
+    let v2 = rng.random_u32() as u64;
+    (v1 << 32) + v2
+}
+
+pub(crate) fn random_u32_from_u64<R: Rng>(rng: &mut R) -> u32 {
+    (rng.random_u64() >> 32) as u32
 }
 
 pub enum RNG {
@@ -35,8 +37,8 @@ impl RNG {
     }
     pub fn random(&mut self) -> u32 {
         match self {
-            RNG::PCG32(pcg) => pcg.random(),
-            RNG::XorshiftStar(xorshift) => xorshift.random(),
+            RNG::PCG32(pcg) => pcg.random_u32(),
+            RNG::XorshiftStar(xorshift) => xorshift.random_u32(),
             RNG::Squares(sq) => sq.random_u32(),
         }
     }

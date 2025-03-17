@@ -6,8 +6,8 @@ pub mod float;
 pub mod pcg;
 pub mod splitmix;
 pub mod squares;
-pub mod xoroshiro;
+// pub mod xoroshiro;
 pub mod xorshift;
-pub mod xoshiro;
+// pub mod xoshiro;
 
 pub use core::RNG;

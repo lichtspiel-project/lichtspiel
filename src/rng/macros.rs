@@ -91,7 +91,8 @@ macro_rules! not_all_zeros {
 /// Macro to get a state of certain size using splitmix
 macro_rules! get_state_from_splitmix {
     ($count:expr, $seed:expr, u32) => {{
-        let mut rng = SplitMix64::with($seed);
+        use crate::rng::splitmix::SplitMix;
+        let mut rng = SplitMix::with_seed($seed);
         let mut result = [0u32; $count];
         for v in result.iter_mut() {
             *v = rng.random_u32();
@@ -99,7 +100,8 @@ macro_rules! get_state_from_splitmix {
         result
     }};
     ($count:expr, $seed:expr, u64) => {{
-        let mut rng = SplitMix64::with($seed);
+        use crate::rng::splitmix::SplitMix;
+        let mut rng = SplitMix::with_seed($seed);
         let mut result = [0u64; $count];
         for v in result.iter_mut() {
             *v = rng.random_u64();
@@ -121,7 +123,7 @@ macro_rules! init_with_state {
 #[cfg(test)]
 macro_rules! test_first_5 {
     ($struct:ident, $seed:expr, [$e0:expr,$e1:expr,$e2:expr,$e3:expr,$e4:expr], u32) => {
-        let mut rng = $struct::with($seed);
+        let mut rng = $struct::with_seed($seed);
         assert_eq!(rng.random_u32(), $e0);
         assert_eq!(rng.random_u32(), $e1);
         assert_eq!(rng.random_u32(), $e2);
@@ -129,7 +131,7 @@ macro_rules! test_first_5 {
         assert_eq!(rng.random_u32(), $e4);
     };
     ($struct:ident, $seed:expr, [$e0:expr,$e1:expr,$e2:expr,$e3:expr,$e4:expr], u64) => {
-        let mut rng = $struct::with($seed);
+        let mut rng = $struct::with_seed($seed);
         assert_eq!(rng.random_u64(), $e0);
         assert_eq!(rng.random_u64(), $e1);
         assert_eq!(rng.random_u64(), $e2);
