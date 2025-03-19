@@ -42,6 +42,19 @@ impl From<f64> for Random64 {
     }
 }
 
+impl From<Random64> for f32 {
+    fn from(value: Random64) -> Self {
+        let v = (127u32 << 23) + ((value.0 >> 41) as u32);
+        f32::from_le_bytes(v.to_le_bytes()) - 1.0
+    }
+}
+
+impl From<f32> for Random64 {
+    fn from(value: f32) -> Self {
+        Random64(u32::from_le_bytes(f32::to_le_bytes(value + 1.0)) as u64)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::u64;
@@ -58,6 +71,12 @@ mod tests {
     fn roundtrip_f64() {
         let core = u64::MAX / 2;
         let rt = Random64::from(f64::from(Random64(core)));
+        assert_ne!(Random64(core), rt);
+    }
+    #[test]
+    fn roundtrip_f32() {
+        let core = u64::MAX / 2;
+        let rt = Random64::from(f32::from(Random64(core)));
         assert_ne!(Random64(core), rt);
     }
     #[test]
