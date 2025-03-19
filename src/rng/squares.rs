@@ -2,6 +2,7 @@
 //!
 //! Basic RNG based on counter based RNG
 use super::core::Random64;
+use super::splitmix::Splitmix;
 
 /// Generate random u64
 fn random_u64(ctr: u64, key: u64) -> u64 {
@@ -25,6 +26,11 @@ pub struct Squares {
 
 impl Squares {
     pub fn with(ctr: u64, key: u64) -> Self {
+        let key = if key == 0 {
+            0x548c9decbce65297_u64
+        } else {
+            key
+        };
         Squares { ctr, key }
     }
     pub fn set_stream(&mut self, stream: u64) {
@@ -41,9 +47,28 @@ impl Squares {
     }
 }
 
+impl Default for Squares {
+    fn default() -> Self {
+        let key: u64 = Splitmix::default().random();
+        Self { ctr: 0, key }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn non_zero_seed_at_default() {
+        let rng = Squares::default();
+        assert_ne!(rng.key, 0)
+    }
+
+    #[test]
+    fn non_zero_key() {
+        let rng = Squares::with(0, 0);
+        assert_ne!(rng.key, 0)
+    }
 
     #[test]
     fn reference_u64() {
