@@ -1,1 +1,1 @@
-mod rng;
+pub mod rng;

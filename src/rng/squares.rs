@@ -1,11 +1,13 @@
-//! # Random number generator for u64 and translation to f64 etc
+//! # Squares RNG
 //!
 //! Basic RNG based on counter based RNG
-use super::core::Random64;
+use super::core::r64;
 use super::splitmix::Splitmix;
 
+const DEFAULT_SPLITMIX_KEY: u64 = 0x548c9decbce65297_u64;
+
 /// Generate random u64
-fn random_u64(ctr: u64, key: u64) -> u64 {
+const fn random_u64(ctr: u64, key: u64) -> u64 {
     let mut x = ctr.wrapping_mul(key);
     let y = x;
     let z = y.wrapping_add(key);
@@ -26,24 +28,20 @@ pub struct Squares {
 
 impl Squares {
     pub fn with(ctr: u64, key: u64) -> Self {
-        let key = if key == 0 {
-            0x548c9decbce65297_u64
-        } else {
-            key
-        };
+        let key = if key == 0 { DEFAULT_SPLITMIX_KEY } else { key };
         Squares { ctr, key }
     }
     pub fn set_stream(&mut self, stream: u64) {
         self.key = stream
     }
-    pub fn random<T: From<Random64>>(&mut self) -> T {
+    pub fn random<T: From<r64>>(&mut self) -> T {
         let v = self.random_u64();
         T::from(v)
     }
-    fn random_u64(&mut self) -> Random64 {
+    fn random_u64(&mut self) -> r64 {
         let result = random_u64(self.ctr, self.key);
         self.ctr += 1;
-        Random64::from(result)
+        r64::from(result)
     }
 }
 
