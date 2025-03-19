@@ -1,6 +1,8 @@
 //! # Squares RNG
 //!
 //! Basic RNG based on counter based RNG
+use std::path::Iter;
+
 use super::core::r64;
 use super::splitmix::Splitmix;
 
@@ -52,9 +54,37 @@ impl Default for Squares {
     }
 }
 
+impl Iterator for Squares {
+    type Item = r64;
+    fn next(&mut self) -> Option<Self::Item> {
+        Some(self.random())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn iterator() {
+        let result: Vec<r64> = Squares::with(0, 0x548c9decbce65297_u64)
+            .into_iter()
+            .take(10)
+            .collect();
+        let expect = [
+            0x36d88366cee633a5_u64,
+            0x944716e00e60dfaa_u64,
+            0xc8a8f4e0678654bf_u64,
+            0x35cc666aab11c80d_u64,
+            0x7094eab1cbae8747_u64,
+            0xa2a1b6f56e92a96f_u64,
+            0xd884957d48007552_u64,
+            0xe61f37b97d593453_u64,
+            0xe4d45c4762b10dad_u64,
+            0xb0dbd071f201dd2a_u64,
+        ];
+        assert_eq!(result, expect)
+    }
 
     #[test]
     fn non_zero_seed_at_default() {
