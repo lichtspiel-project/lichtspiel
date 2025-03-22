@@ -1,8 +1,6 @@
 //! # Squares RNG
 //!
 //! Basic RNG based on counter based RNG
-use std::path::Iter;
-
 use super::core::r64;
 use super::splitmix::Splitmix;
 
