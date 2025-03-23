@@ -52,13 +52,6 @@ impl Default for Squares {
     }
 }
 
-impl Iterator for Squares {
-    type Item = r64;
-    fn next(&mut self) -> Option<Self::Item> {
-        Some(self.random())
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -66,7 +59,7 @@ mod tests {
     #[test]
     fn iterator() {
         let result: Vec<r64> = Squares::with(0, 0x548c9decbce65297_u64)
-            .into_iter()
+            .to_iter()
             .take(10)
             .collect();
         let expect = [

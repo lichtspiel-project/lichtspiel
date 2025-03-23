@@ -1,4 +1,5 @@
 mod core;
+mod iter;
 mod splitmix;
 mod squares;
 mod traits;
