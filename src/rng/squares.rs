@@ -3,6 +3,7 @@
 //! Basic RNG based on counter based RNG
 use super::core::r64;
 use super::splitmix::Splitmix;
+use super::traits::RngCore;
 
 const DEFAULT_SPLITMIX_KEY: u64 = 0x548c9decbce65297_u64;
 
@@ -38,6 +39,9 @@ impl Squares {
         let v = self.random_u64();
         T::from(v)
     }
+}
+
+impl RngCore for Squares {
     fn random_u64(&mut self) -> r64 {
         let result = random_u64(self.ctr, self.key);
         self.ctr += 1;
