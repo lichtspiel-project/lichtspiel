@@ -11,7 +11,8 @@
 //! differentiate mostly based on the step count, the shift and
 //! multiplication values.
 
-use super::{core::r64, traits::RngCore};
+use super::core::r64;
+use super::traits::RngCore;
 
 /// Golden Ratio, prime version: 0x9e3779b97f4a7c55;
 const GOLDEN_RATIO: u64 = 0x9e3779b97f4a7c15;
@@ -32,10 +33,6 @@ impl Splitmix {
     fn new(state: u64) -> Self {
         Self { state }
     }
-    pub fn random<T: From<r64>>(&mut self) -> T {
-        let v = self.random_u64();
-        T::from(v)
-    }
 }
 
 impl RngCore for Splitmix {
@@ -54,6 +51,7 @@ impl Default for Splitmix {
 
 #[cfg(test)]
 mod tests {
+    use super::super::traits::Rng;
     use super::*;
 
     #[test]

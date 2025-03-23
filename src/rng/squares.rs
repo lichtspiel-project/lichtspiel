@@ -3,7 +3,7 @@
 //! Basic RNG based on counter based RNG
 use super::core::r64;
 use super::splitmix::Splitmix;
-use super::traits::RngCore;
+use super::traits::{Rng, RngCore};
 
 const DEFAULT_SPLITMIX_KEY: u64 = 0x548c9decbce65297_u64;
 
@@ -34,10 +34,6 @@ impl Squares {
     }
     pub fn set_stream(&mut self, stream: u64) {
         self.key = stream
-    }
-    pub fn random<T: From<r64>>(&mut self) -> T {
-        let v = self.random_u64();
-        T::from(v)
     }
 }
 
